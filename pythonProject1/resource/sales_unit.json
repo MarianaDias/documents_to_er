@@ -1,0 +1,65 @@
+{
+    "_id": "5bd761dcae323e45a93ccfe8",
+    "saleDate": "1427144809506",
+    "items": [
+        {
+            "name": "printer paper",
+            "tags": [
+                "office",
+                "stationary"
+            ],
+            "price": 40.01,
+            "quantity": 2
+        },
+        {
+            "name": "notepad",
+            "tags": [
+                "office",
+                "writing",
+                "school"
+            ],
+            "price": 35.29,
+            "quantity": 2
+        },
+        {
+            "name": "pens",
+            "tags": [
+                "writing",
+                "office",
+                "school",
+                "stationary"
+            ],
+            "price": 56.12,
+            "quantity": 5
+        },
+        {
+            "name": "backpack",
+            "tags": [
+                "school",
+                "travel",
+                "kids"
+            ],
+            "price": 77.71,
+            "quantity": 2
+        },
+        {
+            "name": "notepad",
+            "tags": [
+                "office",
+                "writing",
+                "school"
+            ],
+            "price": 18.47,
+            "quantity": 2
+        }
+    ],
+    "storeLocation": "Denver",
+    "customer": {
+        "gender": "M",
+        "age": 42,
+        "email": "cauho@witwuta.sv",
+        "satisfaction": 4
+    },
+    "couponUsed": true,
+    "purchaseMethod": "Online"
+}

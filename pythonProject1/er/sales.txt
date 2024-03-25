@@ -1,0 +1,23 @@
+Solution: Sales
+Description: Customers buy items as sale
+Version: 1.0
+
+###################  ERModel ######################
+
+Sales {'_cardinal': 0,
+ 'saleDate': 'string',
+ 'storeLocation': 'string',
+ 'couponUsed': 'boolean',
+ 'purchaseMethod': 'string'}
+
+Items {'_cardinal': 'N',
+ 'name': 'string',
+ 'tags': ['string'],
+ 'price': 'float',
+ 'quantity': 'int'}
+
+Customer {'_cardinal': 1,
+ 'gender': 'string',
+ 'age': 'int',
+ 'email': 'string',
+ 'satisfaction': 'int'}
