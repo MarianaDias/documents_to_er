@@ -2,6 +2,7 @@ import json
 
 entity_dict = {}
 
+
 def read_all(file_path):
     all_obj = []
     with open(file_path, 'r') as f:
@@ -17,7 +18,6 @@ def read_doc_from_json(file_path):
 
 
 def class_str_mapper(c):
-    print(c)
     if c == str:
         return "string"
     elif c == bool:
@@ -26,7 +26,6 @@ def class_str_mapper(c):
         return "int"
     elif c == float:
         return "float"
-
 
 
 def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> object:
@@ -38,7 +37,11 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
         key_type = type(obj_dict[key])
         # R3
         if key_type == dict:
-            apply_rules(obj_dict[key], key, 1)
+            first_key = next(iter(obj_dict[key]))
+            if '$' in first_key:
+                entity_dict[entity_name][key] = first_key.replace('$', '')
+            else:
+                apply_rules(obj_dict[key], key, 1)
         # R4
         elif key_type == list:
             item_type = type(obj_dict[key][0])
