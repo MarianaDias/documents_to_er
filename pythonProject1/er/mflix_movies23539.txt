@@ -1,0 +1,58 @@
+Solution: mflix_movies23539
+Description: Movies
+Version: 1.0
+
+###################  ERModel ######################
+
+Movies {'_cardinal': 0,
+ '_id': 'oid',
+ 'plot': 'string',
+ 'genres': ['string'],
+ 'runtime': 'numberInt',
+ 'cast': ['string'],
+ 'num_mflix_comments': 'numberInt',
+ 'title': 'string',
+ 'fullplot': 'string',
+ 'countries': ['string'],
+ 'released': 'date',
+ 'directors': ['string'],
+ 'rated': 'string',
+ 'lastupdated': 'string',
+ 'year': 'numberInt',
+ 'type': 'string',
+ 'poster': 'string',
+ 'languages': ['string'],
+ 'writers': ['string'],
+ 'metacritic': 'numberInt'}
+
+Awards {'_cardinal': 1,
+ 'wins': 'numberInt',
+ 'nominations': 'numberInt',
+ 'text': 'string'}
+
+Imdb {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'votes': 'numberInt',
+ 'id': 'numberInt'}
+
+Tomatoes {'_cardinal': 1,
+ 'lastUpdated': 'date',
+ 'fresh': 'numberInt',
+ 'rotten': 'numberInt',
+ 'dvd': 'date',
+ 'website': 'string',
+ 'production': 'string',
+ 'consensus': 'string',
+ 'boxOffice': 'string'}
+
+Viewer {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'numReviews': 'numberInt',
+ 'meter': 'numberInt'}
+
+Critic {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'numReviews': 'numberInt',
+ 'meter': 'numberInt'}
+
+MoviesAwardsImdbTomatoesViewerCritic ( Movies,Awards,Imdb,Tomatoes,Viewer,Critic )

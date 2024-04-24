@@ -1,10 +1,10 @@
-Solution: Sales
+Solution: sales5000
 Description: Customers buy items as sale
 Version: 1.0
 
 ###################  ERModel ######################
 
-Sales1 {'_cardinal': 0,
+Sales {'_cardinal': 0,
  '_id': 'oid',
  'saleDate': 'date',
  'storeLocation': 'string',
@@ -22,17 +22,3 @@ Customer {'_cardinal': 1,
  'age': 'numberInt',
  'email': 'string',
  'satisfaction': 'numberInt'}
-
-Sales2 {'_cardinal': 0,
- '_id': 'oid',
- 'saleDate': 'date',
- 'storeLocation': 'string',
- 'couponUsed': 'boolean',
- 'purchaseMethod': 'string'}
-
-Sales3 {'_cardinal': 0,
- '_id': 'oid',
- 'saleDate': 'date',
- 'storeLocation': 'string',
- 'couponUsed': 'boolean',
- 'purchaseMethod': 'string'}

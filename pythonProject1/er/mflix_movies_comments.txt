@@ -1,0 +1,138 @@
+Solution: mflix_movies_comments
+Description: Movies e Comments
+Version: 1.0
+
+###################  ERModel ######################
+
+Movies {'_cardinal': 0,
+ '_id': 'oid',
+ 'plot': 'string',
+ 'genres': ['string'],
+ 'runtime': 'numberInt',
+ 'cast': ['string'],
+ 'num_mflix_comments': 'numberInt',
+ 'title': 'string',
+ 'fullplot': 'string',
+ 'countries': ['string'],
+ 'released': 'date',
+ 'directors': ['string'],
+ 'rated': 'string',
+ 'lastupdated': 'string',
+ 'year': 'numberInt',
+ 'type': 'string',
+ 'poster': 'string',
+ 'languages': ['string'],
+ 'writers': ['string'],
+ 'metacritic': 'numberInt'}
+
+Awards {'_cardinal': 1,
+ 'wins': 'numberInt',
+ 'nominations': 'numberInt',
+ 'text': 'string'}
+
+Imdb {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'votes': 'numberInt',
+ 'id': 'numberInt'}
+
+Tomatoes {'_cardinal': 1,
+ 'lastUpdated': 'date',
+ 'fresh': 'numberInt',
+ 'rotten': 'numberInt',
+ 'dvd': 'date',
+ 'website': 'string',
+ 'production': 'string',
+ 'consensus': 'string',
+ 'boxOffice': 'string'}
+
+Viewer {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'numReviews': 'numberInt',
+ 'meter': 'numberInt'}
+
+Critic {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'numReviews': 'numberInt',
+ 'meter': 'numberInt'}
+
+Comments {'_cardinal': 0,
+ '_id': 'oid',
+ 'name': 'string',
+ 'email': 'string',
+ 'movie_id': 'oid',
+ 'text': 'string',
+ 'date': 'date'}
+
+MoviesAwards (Movies, Awards)
+MoviesImdb (Movies, Imdb)
+MoviesTomatoes (Movies, Tomatoes)
+MoviesViewer (Movies, Viewer)
+MoviesCritic (Movies, Critic)
+MoviesComments (Movies, Comments)
+
+###################  MongoDBSchema ######################
+
+
+MoviesCollection
+{
+     _id: oid  < Movies._id >
+     Plot: string  < Movies.Plot >
+     Genres: ['string']  < Movies.Genres >
+     Runtime: numberInt  < Movies.Runtime >
+     Cast: ['string']  < Movies.Cast >
+     Num_mflix_comments: numberInt  < Movies.Num_mflix_comments >
+     Title: string  < Movies.Title >
+     Fullplot: string  < Movies.Fullplot >
+     Countries: ['string']  < Movies.Countries >
+     Released: date  < Movies.Released >
+     Directors: ['string']  < Movies.Directors >
+     Rated: string  < Movies.Rated >
+     Lastupdated: string  < Movies.Lastupdated >
+     Year: numberInt  < Movies.Year >
+     Type: string  < Movies.Type >
+     Poster: string  < Movies.Poster >
+     Languages: ['string']  < Movies.Languages >
+     Writers: ['string']  < Movies.Writers >
+     Metacritic: numberInt  < Movies.Metacritic >
+     Awards{
+       Wins: numberInt  < Awards.Wins >
+       Nominations: numberInt  < Awards.Nominations >
+       Text: string  < Awards.Text >
+     }
+     Imdb{
+       Rating: numberDouble  < Imdb.Rating >
+       Votes: numberInt  < Imdb.Votes >
+       Id: numberInt  < Imdb.Id >
+     }
+     Tomatoes{
+       Lastupdated: date  < Tomatoes.Lastupdated >
+       Fresh: numberInt  < Tomatoes.Fresh >
+       Rotten: numberInt  < Tomatoes.Rotten >
+       Dvd: date  < Tomatoes.Dvd >
+       Website: string  < Tomatoes.Website >
+       Production: string  < Tomatoes.Production >
+       Consensus: string  < Tomatoes.Consensus >
+       Boxoffice: string  < Tomatoes.Boxoffice >
+     }
+     Viewer{
+       Rating: numberDouble  < Viewer.Rating >
+       Numreviews: numberInt  < Viewer.Numreviews >
+       Meter: numberInt  < Viewer.Meter >
+     }
+     Critic{
+       Rating: numberDouble  < Critic.Rating >
+       Numreviews: numberInt  < Critic.Numreviews >
+       Meter: numberInt  < Critic.Meter >
+     }
+
+}
+
+CommentsCollection
+{
+     _id: oid  < Comments._id >
+     Name: string  < Comments.Name >
+     Email: string  < Comments.Email >
+     Movie_id: oid  < Movies.Movie_id >
+     Text: string  < Comments.Text >
+     Date: date  < Comments.Date >
+}

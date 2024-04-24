@@ -1,0 +1,50 @@
+Solution: mflix_movies1
+Description: Movies
+Version: 1.0
+
+###################  ERModel ######################
+
+Movies {'_cardinal': 0,
+ '_id': 'oid',
+ 'plot': 'string',
+ 'genres': ['string'],
+ 'runtime': 'numberInt',
+ 'cast': ['string'],
+ 'poster': 'string',
+ 'title': 'string',
+ 'fullplot': 'string',
+ 'languages': ['string'],
+ 'released': 'date',
+ 'directors': ['string'],
+ 'rated': 'string'}
+
+Awards {'_cardinal': 1,
+ 'wins': 'numberInt',
+ 'nominations': 'numberInt',
+ 'text': 'string',
+ 'lastupdated': 'string',
+ 'year': 'numberInt',
+ 'countries': ['string'],
+ 'type': 'string'}
+
+Imdb {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'votes': 'numberInt',
+ 'id': 'numberInt'}
+
+Tomatoes {'_cardinal': 1,
+ 'fresh': 'numberInt',
+ 'rotten': 'numberInt',
+ 'lastUpdated': 'date'}
+
+Viewer {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'numReviews': 'numberInt',
+ 'meter': 'numberInt'}
+
+Critic {'_cardinal': 1,
+ 'rating': 'numberDouble',
+ 'numReviews': 'numberInt',
+ 'meter': 'numberInt'}
+
+MoviesAwardsImdbTomatoesViewerCritic ( Movies,Awards,Imdb,Tomatoes,Viewer,Critic )

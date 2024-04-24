@@ -20,4 +20,7 @@ Items {'_cardinal': 'N',
 Customer {'_cardinal': 1,
  'gender': 'string',
  'age': 'numberInt',
- 'email': 'string'}
+ 'email': 'string',
+ 'satisfaction': 'numberInt'}
+
+SalesItemsCustomer ( Sales,Items,Customer )
