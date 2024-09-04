@@ -1,4 +1,5 @@
 import json
+import re
 
 entity_dict = {}
 
@@ -56,7 +57,7 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
             if item_type == dict:
                 apply_rules(obj_dict[key][0], key, 'N')
             else:
-                entity_dict[entity_name][key] = [class_str_mapper(item_type)]
+                entity_dict[entity_name][key] = class_str_mapper(item_type) + '[]'
         # R2
         elif key != '_id':
             entity_dict[entity_name][key] = class_str_mapper(key_type)
@@ -92,34 +93,38 @@ def build_mongo_string_list(link_attr_dict):
         cardinal = entity_dict[key]['_cardinal']
         formatted_key = str(key).capitalize()
         padding_attr = padding1
+
         if cardinal == 0:
             collection_name = '\n\n' + formatted_key + 'Collection' + '\n{\n'
             if len(mongo_db_string_list) > 0:
                 mongo_db_string_list.append('\n}')
         elif cardinal == 1:
-            collection_name = padding1 + formatted_key + '{' + '\n'
+            collection_name = padding1 + formatted_key + ':{' + '\n'
             padding_attr = padding1 + padding2
         elif cardinal == 'N':
             collection_name = padding1 + formatted_key + '['
             padding_attr = padding1 + padding2
         mongo_db_string_list.append(collection_name)
+
         for attr in entity_dict[key]:
             if attr != "_cardinal":
                 if attr in link_attr_dict.keys():
                     add_mongo_str(link_attr_dict[attr], str(attr), str(entity_dict[key][attr]), padding_attr)
                 else:
                     add_mongo_str(formatted_key, str(attr), str(entity_dict[key][attr]), padding_attr)
+
         if cardinal != 0:
             if '{' in collection_name:
                 mongo_db_string_list.append(padding1 + '}\n')
             elif '[' in collection_name:
                 mongo_db_string_list.append(padding1 + ']\n')
+
     mongo_db_string_list.append('}')
 
 
 def export_er_file(solution, description, version):
     file_path = "er/" + solution.lower() + ".txt"
-    head_text = "Solution: " + solution + "\nDescription: " + description + "\nVersion: " + version
+    head_text = "__Solution__: \"" + solution + "\"\n__Description__: " + description + "\n__Version__: " + version
     er_model_title = "\n\n###################  ERModel ######################"
     mongo_title = "\n###################  MongoDBSchema ######################\n"
     relation_name = ""
@@ -133,12 +138,17 @@ def export_er_file(solution, description, version):
             formatted_key = str(key).capitalize()
             relation_name = relation_name + formatted_key
             relation_collections = relation_collections + formatted_key + ','
-            er_entities = str(entity_dict[key]).replace(',', ',\n')
+
+            entity_dict[key].pop('_cardinal')
+
+            attribute_name = "> " + str(key).capitalize() + "ID"
+            er_entities = str(entity_dict[key]).replace("'", "").replace(',', '\n')
+            er_entities = re.sub(r'\b_id\b', attribute_name, er_entities)
             file.write('\n\n')
-            file.write(formatted_key + " " + er_entities)
+            file.write(formatted_key + "\n" + er_entities)
         file.write('\n\n')
         for r in relations_list:
-            file.write(r['name'] + " " + r['entity_list'] + '\n')
+            file.write(r['name'] + " " + r['entity_list'] + ' {}\n')
         file.write(mongo_title)
         for line in mongo_db_string_list:
             file.write(line)
