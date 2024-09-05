@@ -1,11 +1,12 @@
-Solution: Sales
-Description: Customers buy items as sale
+Solution: sales
+Description: Sales
 Version: 1.0
 
 ###################  ERModel ######################
 
 Sales {'_cardinal': 0,
- 'saleDate': 'string',
+ '_id': 'oid',
+ 'saleDate': 'date',
  'storeLocation': 'string',
  'couponUsed': 'boolean',
  'purchaseMethod': 'string'}
@@ -13,11 +14,37 @@ Sales {'_cardinal': 0,
 Items {'_cardinal': 'N',
  'name': 'string',
  'tags': ['string'],
- 'price': 'float',
- 'quantity': 'int'}
+ 'price': 'numberDecimal',
+ 'quantity': 'numberInt'}
 
 Customer {'_cardinal': 1,
  'gender': 'string',
- 'age': 'int',
+ 'age': 'numberInt',
  'email': 'string',
- 'satisfaction': 'int'}
+ 'satisfaction': 'numberInt'}
+
+SalesItems (Sales, Items)
+SalesCustomer (Sales, Customer)
+
+###################  MongoDBSchema ######################
+
+
+SalesCollection
+{
+     _id: oid  < Sales._id >
+     Saledate: date  < Sales.Saledate >
+     Storelocation: string  < Sales.Storelocation >
+     Couponused: boolean  < Sales.Couponused >
+     Purchasemethod: string  < Sales.Purchasemethod >
+     Items[       Name: string  < Items.Name >
+       Tags: ['string']  < Items.Tags >
+       Price: numberDecimal  < Items.Price >
+       Quantity: numberInt  < Items.Quantity >
+     ]
+     Customer{
+       Gender: string  < Customer.Gender >
+       Age: numberInt  < Customer.Age >
+       Email: string  < Customer.Email >
+       Satisfaction: numberInt  < Customer.Satisfaction >
+     }
+}

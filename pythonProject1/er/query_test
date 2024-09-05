@@ -1,0 +1,7 @@
+db.MoviesCollection.aggregate
+([{$lookup:
+ {from: "CommentsCollection",as: "data_Comments_join",foreignField: ,localField: }},
+ {$addFields: {data_Comments: {$map: {input: "$data_Comments_join",as: "data_Comments",in: {}}}}},
+ {$project: {data_Comments_join: false}},
+ {$addFields: {data_MoviesComments: {$concatArrays: ["$data_Comments"]}}},
+ $project: {data_Comments: false}}], {allowDiskUse: true});
