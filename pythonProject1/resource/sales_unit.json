@@ -53,12 +53,10 @@
             "quantity": 2
         }
     ],
-    "storeLocation": "Denver",
-    "customer": {
-        "gender": "M",
-        "age": 42,
-        "email": "cauho@witwuta.sv",
-        "satisfaction": 4
+    "storeLocation": {
+       "street":"1234 W Madison St",
+        "number":{"$numberInt":"60607"},
+        "city":"Chicago"
     },
     "couponUsed": true,
     "purchaseMethod": "Online"
