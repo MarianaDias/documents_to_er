@@ -63,18 +63,19 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
             entity_dict[entity_name][key] = class_str_mapper(key_type)
 
 
-def build_relations(related_collections):
+def build_relations(manual_db_ref):
     entity_name = None
     for key in entity_dict.keys():
         relation = {}
         cardinal = entity_dict[key]['_cardinal']
-        formatted_key = str(key).capitalize()
+        formatted_key = str(key)
         if cardinal == 0:
-            if entity_name is not None and related_collections:
-                relation['name'] = entity_name + formatted_key
-                relation['entity_list'] = '(' + entity_name + ', ' + formatted_key + ')'
-                relations_list.append(relation)
             entity_name = formatted_key
+            for collection in manual_db_ref:
+                if collection["collection"] == entity_name:
+                    relation['name'] = entity_name + collection["ref"]
+                    relation['entity_list'] = '(' + entity_name + ', ' + collection["ref"] + ')'
+                    relations_list.append(relation)
         else:
             relation['name'] = entity_name + formatted_key
             relation['entity_list'] = '(' + entity_name + ', ' + formatted_key + ')'
@@ -82,16 +83,22 @@ def build_relations(related_collections):
 
 
 def add_mongo_str(collection, attr, str_type, padding_attr):
-    mongo_str = (padding_attr + attr.capitalize() + ": " + str_type + padding2 + '< ' + collection + '.'
-                 + attr.capitalize() + ' >\n')
+    mongo_str = (padding_attr + attr + ": " + str_type + padding2 + '< ' + collection + '.'
+                 + attr + ' >\n')
     mongo_db_string_list.append(mongo_str)
 
+def is_attr_ref(manual_db_ref, target_collection_name, attr):
+    for collection in manual_db_ref:
+        if collection["collection"] == target_collection_name:
+            if collection["key"] == attr:
+                return collection
+    return None
 
-def build_mongo_string_list(link_attr_dict):
+def build_mongo_string_list(manual_db_ref):
     collection_name = '\n'
     for key in entity_dict.keys():
         cardinal = entity_dict[key]['_cardinal']
-        formatted_key = str(key).capitalize()
+        formatted_key = str(key)
         padding_attr = padding1
 
         if cardinal == 0:
@@ -108,8 +115,9 @@ def build_mongo_string_list(link_attr_dict):
 
         for attr in entity_dict[key]:
             if attr != "_cardinal":
-                if attr in link_attr_dict.keys():
-                    add_mongo_str(link_attr_dict[attr], str(attr), str(entity_dict[key][attr]), padding_attr)
+                reference_collection = is_attr_ref(manual_db_ref, formatted_key, attr)
+                if reference_collection is not None:
+                    add_mongo_str(reference_collection["ref"], str(attr), str(entity_dict[key][attr]), padding_attr)
                 else:
                     add_mongo_str(formatted_key, str(attr), str(entity_dict[key][attr]), padding_attr)
 
@@ -121,38 +129,54 @@ def build_mongo_string_list(link_attr_dict):
 
     mongo_db_string_list.append('}')
 
+def remove_relation_att(entity):
+    # Regex to find keys with '_id'
+    regex = r'\b(?!_id\b)\w*_id\w*\b'
+    attr_to_pop = [k for k in entity if re.search(regex, k)]
+    for k in attr_to_pop:
+        entity.pop(k)
+
+def write_er_model_to_file(file):
+    relation_name = ""
+    relation_collections = "( "
+    for key in entity_dict.keys():
+        formatted_key = str(key)
+        relation_name = relation_name + formatted_key
+        relation_collections = relation_collections + formatted_key + ','
+
+        entity_dict[key].pop('_cardinal')
+        remove_relation_att(entity_dict[key])
+
+        attribute_name = "> " + str(key) + "ID"
+        er_entities = str(entity_dict[key]).replace("'", "").replace(',', '\n')
+        er_entities = re.sub(r'\b_id\b', attribute_name, er_entities)
+
+        file.write('\n\n')
+        file.write(formatted_key + "\n" + er_entities)
+    file.write('\n\n')
+
+def write_relationships_to_file(file):
+    for r in relations_list:
+        file.write(r['name'] + " " + r['entity_list'] + ' {}\n')
+
+def write_mongo_db_map_to_file(file):
+    for line in mongo_db_string_list:
+        file.write(line)
 
 def export_er_file(solution, description, version):
     file_path = "er/" + solution.lower() + ".txt"
     head_text = "__Solution__: \"" + solution + "\"\n__Description__: " + description + "\n__Version__: " + version
     er_model_title = "\n\n###################  ERModel ######################"
     mongo_title = "\n###################  MongoDBSchema ######################\n"
-    relation_name = ""
-    relation_collections = "( "
 
     with open(file_path, 'w') as file:
         file.write(head_text)
         file.write(er_model_title)
     with open(file_path, 'a') as file:
-        for key in entity_dict.keys():
-            formatted_key = str(key).capitalize()
-            relation_name = relation_name + formatted_key
-            relation_collections = relation_collections + formatted_key + ','
-
-            entity_dict[key].pop('_cardinal')
-
-            attribute_name = "> " + str(key).capitalize() + "ID"
-            er_entities = str(entity_dict[key]).replace("'", "").replace(',', '\n')
-            er_entities = re.sub(r'\b_id\b', attribute_name, er_entities)
-            file.write('\n\n')
-            file.write(formatted_key + "\n" + er_entities)
-        file.write('\n\n')
-        for r in relations_list:
-            file.write(r['name'] + " " + r['entity_list'] + ' {}\n')
+        write_er_model_to_file(file)
+        write_relationships_to_file(file)
         file.write(mongo_title)
-        for line in mongo_db_string_list:
-            file.write(line)
-
+        write_mongo_db_map_to_file(file)
 
 def just_pretty_print():
     er_entities = str(entity_dict).replace(',', ',\n').replace("}", "}\n")

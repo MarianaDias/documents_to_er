@@ -1,0 +1,137 @@
+__Solution__: "mflix_4"
+__Description__: "Movies e Comments"
+__Version__: "1.0"
+
+###################  ERModel ######################
+
+Movies
+{> MoviesID: oid
+ plot: string
+ genres: string[]
+ runtime: numberInt
+ cast: string[]
+ num_mflix_comments: numberInt
+ title: string
+ fullplot: string
+ countries: string[]
+ released: date
+ directors: string[]
+ rated: string
+ lastupdated: string
+ year: numberInt
+ type: string
+ poster: string
+ languages: string[]
+ writers: string[]
+ metacritic: numberInt}
+
+awards
+{wins: numberInt
+ nominations: numberInt
+ text: string}
+
+imdb
+{rating: numberDouble
+ votes: numberInt
+ id: numberInt}
+
+tomatoes
+{lastUpdated: date
+ fresh: numberInt
+ rotten: numberInt
+ dvd: date
+ website: string
+ production: string
+ consensus: string
+ boxOffice: string}
+
+viewer
+{rating: numberDouble
+ numReviews: numberInt
+ meter: numberInt}
+
+critic
+{rating: numberDouble
+ numReviews: numberInt
+ meter: numberInt}
+
+Comments
+{> CommentsID: oid
+ name: string
+ email: string
+ text: string
+ date: date}
+
+Moviesawards (Movies, awards) {}
+Moviesimdb (Movies, imdb) {}
+Moviestomatoes (Movies, tomatoes) {}
+Moviesviewer (Movies, viewer) {}
+Moviescritic (Movies, critic) {}
+CommentsMovies (Comments, Movies) {}
+
+###################  MongoDBSchema ######################
+
+
+MoviesCollection
+{
+     _id: oid  < Movies._id >
+     plot: string  < Movies.plot >
+     genres: string[]  < Movies.genres >
+     runtime: numberInt  < Movies.runtime >
+     cast: string[]  < Movies.cast >
+     num_mflix_comments: numberInt  < Movies.num_mflix_comments >
+     title: string  < Movies.title >
+     fullplot: string  < Movies.fullplot >
+     countries: string[]  < Movies.countries >
+     released: date  < Movies.released >
+     directors: string[]  < Movies.directors >
+     rated: string  < Movies.rated >
+     lastupdated: string  < Movies.lastupdated >
+     year: numberInt  < Movies.year >
+     type: string  < Movies.type >
+     poster: string  < Movies.poster >
+     languages: string[]  < Movies.languages >
+     writers: string[]  < Movies.writers >
+     metacritic: numberInt  < Movies.metacritic >
+     awards:{
+       wins: numberInt  < awards.wins >
+       nominations: numberInt  < awards.nominations >
+       text: string  < awards.text >
+     }
+     imdb:{
+       rating: numberDouble  < imdb.rating >
+       votes: numberInt  < imdb.votes >
+       id: numberInt  < imdb.id >
+     }
+     tomatoes:{
+       lastUpdated: date  < tomatoes.lastUpdated >
+       fresh: numberInt  < tomatoes.fresh >
+       rotten: numberInt  < tomatoes.rotten >
+       dvd: date  < tomatoes.dvd >
+       website: string  < tomatoes.website >
+       production: string  < tomatoes.production >
+       consensus: string  < tomatoes.consensus >
+       boxOffice: string  < tomatoes.boxOffice >
+     }
+     viewer:{
+       rating: numberDouble  < viewer.rating >
+       numReviews: numberInt  < viewer.numReviews >
+       meter: numberInt  < viewer.meter >
+     }
+     critic:{
+       rating: numberDouble  < critic.rating >
+       numReviews: numberInt  < critic.numReviews >
+       meter: numberInt  < critic.meter >
+     }
+
+}
+
+CommentsCollection
+{
+     _id: oid  < Comments._id >
+     name: string  < Comments.name >
+     email: string  < Comments.email >
+     movie_id: oid  < Movies.movie_id >
+     text: string  < Comments.text >
+     date: date  < Comments.date >
+}
