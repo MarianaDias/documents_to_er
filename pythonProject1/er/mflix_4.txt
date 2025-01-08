@@ -72,9 +72,9 @@ CommentsMovies (Comments, Movies) {}
 ###################  MongoDBSchema ######################
 
 
-MoviesCollection
+MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
 {
-     _id: oid  < Movies._id >
+     _id: oid  < Movies.MoviesID >
      plot: string  < Movies.plot >
      genres: string[]  < Movies.genres >
      runtime: numberInt  < Movies.runtime >
@@ -126,12 +126,12 @@ MoviesCollection
 
 }
 
-CommentsCollection
+CommentsCollection < Comments*, Movies >
 {
-     _id: oid  < Comments._id >
+     _id: oid  < Comments.CommentsID >
      name: string  < Comments.name >
      email: string  < Comments.email >
-     movie_id: oid  < Movies.movie_id >
+     movie_id: oid  < Movies.MoviesID >
      text: string  < Comments.text >
      date: date  < Comments.date >
 }

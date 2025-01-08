@@ -82,9 +82,9 @@ def build_relations(manual_db_ref):
             relations_list.append(relation)
 
 
-def add_mongo_str(collection, attr, str_type, padding_attr):
+def add_mongo_str(collection, attr, str_type, padding_attr, attr_on_er):
     mongo_str = (padding_attr + attr + ": " + str_type + padding2 + '< ' + collection + '.'
-                 + attr + ' >\n')
+                 + attr_on_er + ' >\n')
     mongo_db_string_list.append(mongo_str)
 
 def is_attr_ref(manual_db_ref, target_collection_name, attr):
@@ -94,15 +94,35 @@ def is_attr_ref(manual_db_ref, target_collection_name, attr):
                 return collection
     return None
 
+def build_entity_list_in_collection(manual_db_ref):
+    entity_list_in_collection = {}
+    root_collection = ""
+    for key in entity_dict.keys():
+        cardinal = entity_dict[key]['_cardinal']
+        formatted_key = str(key)
+        if cardinal == 0:
+            if root_collection != "":
+                entity_list_in_collection[root_collection] = entity_list_in_collection[root_collection] + " >"
+            root_collection = formatted_key
+            entity_list_in_collection[root_collection] = "< " + formatted_key + "*"
+        else:
+            entity_list_in_collection[root_collection] = entity_list_in_collection[root_collection] + ", " + formatted_key
+        for c in manual_db_ref:
+            if c['collection'] == root_collection:
+                entity_list_in_collection[root_collection] = entity_list_in_collection[root_collection] + ", " + c['ref']
+    entity_list_in_collection[root_collection] = entity_list_in_collection[root_collection] + " >"
+    return entity_list_in_collection
+
 def build_mongo_string_list(manual_db_ref):
     collection_name = '\n'
+    entity_list_in_collection = build_entity_list_in_collection(manual_db_ref)
     for key in entity_dict.keys():
         cardinal = entity_dict[key]['_cardinal']
         formatted_key = str(key)
         padding_attr = padding1
 
         if cardinal == 0:
-            collection_name = '\n\n' + formatted_key + 'Collection' + '\n{\n'
+            collection_name = '\n\n' + formatted_key + 'Collection ' + entity_list_in_collection[formatted_key] + '\n{\n'
             if len(mongo_db_string_list) > 0:
                 mongo_db_string_list.append('\n}')
         elif cardinal == 1:
@@ -117,16 +137,17 @@ def build_mongo_string_list(manual_db_ref):
             if attr != "_cardinal":
                 reference_collection = is_attr_ref(manual_db_ref, formatted_key, attr)
                 if reference_collection is not None:
-                    add_mongo_str(reference_collection["ref"], str(attr), str(entity_dict[key][attr]), padding_attr)
+                    add_mongo_str(reference_collection["ref"], str(attr), str(entity_dict[key][attr]), padding_attr, str(reference_collection["ref"]) + "ID")
+                elif attr == "_id":
+                    add_mongo_str(formatted_key, str(attr), str(entity_dict[key][attr]), padding_attr, formatted_key + "ID")
                 else:
-                    add_mongo_str(formatted_key, str(attr), str(entity_dict[key][attr]), padding_attr)
+                    add_mongo_str(formatted_key, str(attr), str(entity_dict[key][attr]), padding_attr, str(attr))
 
         if cardinal != 0:
             if '{' in collection_name:
                 mongo_db_string_list.append(padding1 + '}\n')
             elif '[' in collection_name:
                 mongo_db_string_list.append(padding1 + ']\n')
-
     mongo_db_string_list.append('}')
 
 def remove_relation_att(entity):
