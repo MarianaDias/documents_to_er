@@ -3,7 +3,7 @@ import json
 
 
 def process_item(obj_dict, name):
-    rules.apply_rules(obj_dict, name, 0)
+    rules.apply_rules(obj_dict, name, 0, name)
 
 
 def run_n_files(path_list, coll_names, solution, description, version, manual_db_ref=[]):

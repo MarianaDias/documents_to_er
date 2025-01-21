@@ -1,0 +1,189 @@
+__Solution__: "mflix_5"
+__Description__: "Movies, Comments e Theaters"
+__Version__: "1.0"
+
+###################  ERModel ######################
+
+Movies
+{> MoviesID: oid
+ plot: string
+ genres: string[]
+ runtime: numberInt
+ cast: string[]
+ num_mflix_comments: numberInt
+ title: string
+ fullplot: string
+ countries: string[]
+ released: date
+ directors: string[]
+ rated: string
+ lastupdated: string
+ year: numberInt
+ type: string
+ poster: string
+ languages: string[]
+ writers: string[]
+ metacritic: numberInt}
+
+awards
+{wins: numberInt
+ nominations: numberInt
+ text: string}
+
+imdb
+{rating: numberDouble
+ votes: numberInt
+ id: numberInt}
+
+tomatoes
+{lastUpdated: date
+ fresh: numberInt
+ rotten: numberInt
+ dvd: date
+ website: string
+ production: string
+ consensus: string
+ boxOffice: string}
+
+viewer
+{rating: numberDouble
+ numReviews: numberInt
+ meter: numberInt}
+
+critic
+{rating: numberDouble
+ numReviews: numberInt
+ meter: numberInt}
+
+Comments
+{> CommentsID: oid
+ name: string
+ email: string
+ text: string
+ date: date}
+
+Theaters
+{> TheatersID: oid
+ theaterId: numberInt}
+
+location
+{}
+
+address
+{street1: string
+ city: string
+ state: string
+ zipcode: string
+ street2: string}
+
+geo
+{type: string
+ coordinates: numberDouble[]}
+
+Moviesawards (Movies, awards) {}
+Moviesimdb (Movies, imdb) {}
+Moviestomatoes (Movies, tomatoes) {}
+tomatoesviewer (tomatoes, viewer) {}
+tomatoescritic (tomatoes, critic) {}
+CommentsMovies (Comments, Movies) {}
+Theaterslocation (Theaters, location) {}
+locationaddress (location, address) {}
+locationgeo (location, geo) {}
+
+###################  MongoDBSchema ######################
+
+
+MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
+{
+     _ref: Movies  < Movies._ref >
+     _id: oid  < Movies.MoviesID >
+     plot: string  < Movies.plot >
+     genres: string[]  < Movies.genres >
+     runtime: numberInt  < Movies.runtime >
+     cast: string[]  < Movies.cast >
+     num_mflix_comments: numberInt  < Movies.num_mflix_comments >
+     title: string  < Movies.title >
+     fullplot: string  < Movies.fullplot >
+     countries: string[]  < Movies.countries >
+     released: date  < Movies.released >
+     directors: string[]  < Movies.directors >
+     rated: string  < Movies.rated >
+     lastupdated: string  < Movies.lastupdated >
+     year: numberInt  < Movies.year >
+     type: string  < Movies.type >
+     poster: string  < Movies.poster >
+     languages: string[]  < Movies.languages >
+     writers: string[]  < Movies.writers >
+     metacritic: numberInt  < Movies.metacritic >
+     awards:{
+       _ref: Movies  < awards._ref >
+       wins: numberInt  < awards.wins >
+       nominations: numberInt  < awards.nominations >
+       text: string  < awards.text >
+     }
+     imdb:{
+       _ref: Movies  < imdb._ref >
+       rating: numberDouble  < imdb.rating >
+       votes: numberInt  < imdb.votes >
+       id: numberInt  < imdb.id >
+     }
+     tomatoes:{
+       _ref: Movies  < tomatoes._ref >
+       lastUpdated: date  < tomatoes.lastUpdated >
+       fresh: numberInt  < tomatoes.fresh >
+       rotten: numberInt  < tomatoes.rotten >
+       dvd: date  < tomatoes.dvd >
+       website: string  < tomatoes.website >
+       production: string  < tomatoes.production >
+       consensus: string  < tomatoes.consensus >
+       boxOffice: string  < tomatoes.boxOffice >
+     }
+     viewer:{
+       _ref: tomatoes  < viewer._ref >
+       rating: numberDouble  < viewer.rating >
+       numReviews: numberInt  < viewer.numReviews >
+       meter: numberInt  < viewer.meter >
+     }
+     critic:{
+       _ref: tomatoes  < critic._ref >
+       rating: numberDouble  < critic.rating >
+       numReviews: numberInt  < critic.numReviews >
+       meter: numberInt  < critic.meter >
+     }
+
+}
+
+CommentsCollection < Comments*, Movies >
+{
+     _ref: Comments  < Comments._ref >
+     _id: oid  < Comments.CommentsID >
+     name: string  < Comments.name >
+     email: string  < Comments.email >
+     movie_id: oid  < Movies.MoviesID >
+     text: string  < Comments.text >
+     date: date  < Comments.date >
+
+}
+
+TheatersCollection < Theaters*, location, address, geo >
+{
+     _ref: Theaters  < Theaters._ref >
+     _id: oid  < Theaters.TheatersID >
+     theaterId: numberInt  < Theaters.theaterId >
+     location:{
+       _ref: Theaters  < location._ref >
+     }
+     address:{
+       _ref: location  < address._ref >
+       street1: string  < address.street1 >
+       city: string  < address.city >
+       state: string  < address.state >
+       zipcode: string  < address.zipcode >
+       street2: string  < address.street2 >
+     }
+     geo:{
+       _ref: location  < geo._ref >
+       type: string  < geo.type >
+       coordinates: numberDouble[]  < geo.coordinates >
+     }
+}

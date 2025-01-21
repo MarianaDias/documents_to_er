@@ -34,11 +34,12 @@ def class_str_mapper(c):
     elif c == float:
         return "float"
 
-def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> object:
+def apply_rules(obj_dict: object, entity_name: object, cardinal: object, ref) -> object:
     # R1
     if entity_name not in entity_dict.keys():
         entity_dict[entity_name] = {
-            "_cardinal": cardinal
+            "_cardinal": cardinal,
+            "_ref": ref
         }
     for key in obj_dict.keys():
         key_type = type(obj_dict[key])
@@ -49,7 +50,7 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
                 type_name = first_key.replace('$', '')
                 entity_dict[entity_name][key] = type_name
             else:
-                apply_rules(obj_dict[key], key, 1)
+                apply_rules(obj_dict[key], key, 1, entity_name)
         # R4
         elif key_type == list:
             item_type = type(obj_dict[key][0])
@@ -58,7 +59,7 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
                     item_key_type = list(obj_dict[key][0].keys())[0].replace('$', '')
                     entity_dict[entity_name][key] = item_key_type + '[]'
                 else:
-                    apply_rules(obj_dict[key][0], key, 'N')
+                    apply_rules(obj_dict[key][0], key, 'N', entity_name)
             else:
                 entity_dict[entity_name][key] = class_str_mapper(item_type) + '[]'
         # R2
@@ -67,10 +68,12 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
 
 
 def build_relations(manual_db_ref):
+    just_pretty_print()
     entity_name = None
     for key in entity_dict.keys():
         relation = {}
         cardinal = entity_dict[key]['_cardinal']
+        ref = entity_dict[key]['_ref']
         formatted_key = str(key)
         if cardinal == 0:
             entity_name = formatted_key
@@ -80,8 +83,8 @@ def build_relations(manual_db_ref):
                     relation['entity_list'] = '(' + entity_name + ', ' + collection["ref"] + ')'
                     relations_list.append(relation)
         else:
-            relation['name'] = entity_name + formatted_key
-            relation['entity_list'] = '(' + entity_name + ', ' + formatted_key + ')'
+            relation['name'] = ref + formatted_key
+            relation['entity_list'] = '(' + ref + ', ' + formatted_key + ')'
             relations_list.append(relation)
 
 
@@ -169,6 +172,7 @@ def write_er_model_to_file(file):
         relation_collections = relation_collections + formatted_key + ','
 
         entity_dict[key].pop('_cardinal')
+        entity_dict[key].pop('_ref')
         remove_relation_att(entity_dict[key])
 
         attribute_name = "> " + str(key) + "ID"
