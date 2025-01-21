@@ -1,13 +1,12 @@
-{"_id":
-{"$oid":"59a47286cfa9a3a73e51e73f"},
-  "theaterId":
-  {"$numberInt":"1023"},
-  "location":
-  {"address":
-  {"street1":"823 N Creek Dr",
-    "city":"Sherman",
-    "state":"TX",
-    "zipcode":"75092"},
-    "geo":
-    {"type":"Point",
-      "coordinates":[{"$numberDouble":"-96.608055"},{"$numberDouble":"33.685692"}]}}}
+{"_id":{"$oid":"59a47286cfa9a3a73e51e72d"},
+  "theaterId":{"$numberInt":"1003"},
+  "location":{
+    "address":
+    {"street1":"45235 Worth Ave.",
+      "city":"California",
+      "state":"MD",
+      "zipcode":"20619"},
+    "geo":{
+      "type":"Point",
+      "coordinates":[{"$numberDouble":"-76.512016"},{"$numberDouble":"38.29697"}]}}}
+

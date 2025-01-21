@@ -34,7 +34,6 @@ def class_str_mapper(c):
     elif c == float:
         return "float"
 
-
 def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> object:
     # R1
     if entity_name not in entity_dict.keys():
@@ -55,7 +54,11 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object) -> obje
         elif key_type == list:
             item_type = type(obj_dict[key][0])
             if item_type == dict:
-                apply_rules(obj_dict[key][0], key, 'N')
+                if '$' in str(obj_dict[key][0].keys()):
+                    item_key_type = list(obj_dict[key][0].keys())[0].replace('$', '')
+                    entity_dict[entity_name][key] = item_key_type + '[]'
+                else:
+                    apply_rules(obj_dict[key][0], key, 'N')
             else:
                 entity_dict[entity_name][key] = class_str_mapper(item_type) + '[]'
         # R2

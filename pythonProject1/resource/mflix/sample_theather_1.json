@@ -1,0 +1,1 @@
+{"_id":{"$oid":"59a47286cfa9a3a73e51e72d"},"theaterId":{"$numberInt":"1003"},"location":{"address":{"street1":"45235 Worth Ave.","city":"California","state":"MD","zipcode":"20619"},"geo":{"type":"Point","coordinates":[-76.512016, 38.29697]}}}

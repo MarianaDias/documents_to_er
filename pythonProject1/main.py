@@ -21,9 +21,5 @@ def run_n_files(path_list, coll_names, solution, description, version, manual_db
 
 if __name__ == '__main__':
     print('Starting transformation')
-    #run_n_files(["resource/sample_sales_1.json"], ["Sales"], "sales_1", "\"Sales\"", "\"1.0\"")
-    #run_n_files(["resource/mflix/movies.json", "resource/mflix/comments.json"], ["Movies", "Comments"],
-     #           "mflix_3", "\"Movies e Comments\"", "\"1.0\"", True, {"movie_id": "Movies"})
-    run_n_files(["resource/mflix/movies.json", "resource/mflix/comments.json"], ["Movies", "Comments"],
-                "mflix_4", "\"Movies e Comments\"", "\"1.0\"", [{"collection": "Comments", "ref": "Movies", "key": "movie_id"}])
+    run_n_files(["resource/mflix/movies.json", "resource/mflix/comments.json", "resource/mflix/theaters.json"], ["Movies", "Comments", "Theaters"],"mflix_5", "\"Movies, Comments e Theaters\"", "\"1.0\"", [{"collection": "Comments", "ref": "Movies", "key": "movie_id"}])
     print('Done')
