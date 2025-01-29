@@ -68,8 +68,6 @@ def apply_rules(obj_dict: object, entity_name: object, cardinal: object, ref) ->
 
 
 def build_relations(manual_db_ref):
-    just_pretty_print()
-    entity_name = None
     for key in entity_dict.keys():
         relation = {}
         cardinal = entity_dict[key]['_cardinal']
@@ -122,8 +120,10 @@ def build_entity_list_in_collection(manual_db_ref):
 def build_mongo_string_list(manual_db_ref):
     collection_name = '\n'
     entity_list_in_collection = build_entity_list_in_collection(manual_db_ref)
+    root_entity = ""
     for key in entity_dict.keys():
         cardinal = entity_dict[key]['_cardinal']
+        entity_ref = entity_dict[key]['_ref']
         formatted_key = str(key)
         padding_attr = padding1
 
@@ -132,6 +132,8 @@ def build_mongo_string_list(manual_db_ref):
             if len(mongo_db_string_list) > 0:
                 mongo_db_string_list.append('\n}')
         elif cardinal == 1:
+            if root_entity == entity_ref:
+                mongo_db_string_list.pop()
             collection_name = padding1 + formatted_key + ':{' + '\n'
             padding_attr = padding1 + padding2
         elif cardinal == 'N':
@@ -140,7 +142,7 @@ def build_mongo_string_list(manual_db_ref):
         mongo_db_string_list.append(collection_name)
 
         for attr in entity_dict[key]:
-            if attr != "_cardinal":
+            if attr != "_cardinal" and attr != "_ref":
                 reference_collection = is_attr_ref(manual_db_ref, formatted_key, attr)
                 if reference_collection is not None:
                     add_mongo_str(reference_collection["ref"], str(attr), str(entity_dict[key][attr]), padding_attr, str(reference_collection["ref"]) + "ID")
@@ -154,6 +156,7 @@ def build_mongo_string_list(manual_db_ref):
                 mongo_db_string_list.append(padding1 + '}\n')
             elif '[' in collection_name:
                 mongo_db_string_list.append(padding1 + ']\n')
+        root_entity = key
     mongo_db_string_list.append('}')
 
 def remove_relation_att(entity):

@@ -95,7 +95,6 @@ locationgeo (location, geo) {}
 
 MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
 {
-     _ref: Movies  < Movies._ref >
      _id: oid  < Movies.MoviesID >
      plot: string  < Movies.plot >
      genres: string[]  < Movies.genres >
@@ -114,21 +113,17 @@ MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
      poster: string  < Movies.poster >
      languages: string[]  < Movies.languages >
      writers: string[]  < Movies.writers >
-     metacritic: numberInt  < Movies.metacritic >
      awards:{
-       _ref: Movies  < awards._ref >
        wins: numberInt  < awards.wins >
        nominations: numberInt  < awards.nominations >
        text: string  < awards.text >
      }
      imdb:{
-       _ref: Movies  < imdb._ref >
        rating: numberDouble  < imdb.rating >
        votes: numberInt  < imdb.votes >
        id: numberInt  < imdb.id >
      }
      tomatoes:{
-       _ref: Movies  < tomatoes._ref >
        lastUpdated: date  < tomatoes.lastUpdated >
        fresh: numberInt  < tomatoes.fresh >
        rotten: numberInt  < tomatoes.rotten >
@@ -137,15 +132,12 @@ MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
        production: string  < tomatoes.production >
        consensus: string  < tomatoes.consensus >
        boxOffice: string  < tomatoes.boxOffice >
-     }
      viewer:{
-       _ref: tomatoes  < viewer._ref >
        rating: numberDouble  < viewer.rating >
        numReviews: numberInt  < viewer.numReviews >
        meter: numberInt  < viewer.meter >
      }
      critic:{
-       _ref: tomatoes  < critic._ref >
        rating: numberDouble  < critic.rating >
        numReviews: numberInt  < critic.numReviews >
        meter: numberInt  < critic.meter >
@@ -155,7 +147,6 @@ MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
 
 CommentsCollection < Comments*, Movies >
 {
-     _ref: Comments  < Comments._ref >
      _id: oid  < Comments.CommentsID >
      name: string  < Comments.name >
      email: string  < Comments.email >
@@ -167,14 +158,9 @@ CommentsCollection < Comments*, Movies >
 
 TheatersCollection < Theaters*, location, address, geo >
 {
-     _ref: Theaters  < Theaters._ref >
      _id: oid  < Theaters.TheatersID >
-     theaterId: numberInt  < Theaters.theaterId >
      location:{
-       _ref: Theaters  < location._ref >
-     }
      address:{
-       _ref: location  < address._ref >
        street1: string  < address.street1 >
        city: string  < address.city >
        state: string  < address.state >
@@ -182,7 +168,6 @@ TheatersCollection < Theaters*, location, address, geo >
        street2: string  < address.street2 >
      }
      geo:{
-       _ref: location  < geo._ref >
        type: string  < geo.type >
        coordinates: numberDouble[]  < geo.coordinates >
      }
