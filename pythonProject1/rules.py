@@ -121,6 +121,7 @@ def build_mongo_string_list(manual_db_ref):
     collection_name = '\n'
     entity_list_in_collection = build_entity_list_in_collection(manual_db_ref)
     root_entity = ""
+    popped = False
     for key in entity_dict.keys():
         cardinal = entity_dict[key]['_cardinal']
         entity_ref = entity_dict[key]['_ref']

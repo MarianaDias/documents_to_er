@@ -132,15 +132,16 @@ MoviesCollection < Movies*, awards, imdb, tomatoes, viewer, critic >
        production: string  < tomatoes.production >
        consensus: string  < tomatoes.consensus >
        boxOffice: string  < tomatoes.boxOffice >
-     viewer:{
-       rating: numberDouble  < viewer.rating >
-       numReviews: numberInt  < viewer.numReviews >
-       meter: numberInt  < viewer.meter >
-     }
-     critic:{
-       rating: numberDouble  < critic.rating >
-       numReviews: numberInt  < critic.numReviews >
-       meter: numberInt  < critic.meter >
+       viewer:{
+           rating: numberDouble  < viewer.rating >
+           numReviews: numberInt  < viewer.numReviews >
+           meter: numberInt  < viewer.meter >
+       }
+       critic:{
+           rating: numberDouble  < critic.rating >
+           numReviews: numberInt  < critic.numReviews >
+           meter: numberInt  < critic.meter >
+         }
      }
 
 }
@@ -160,15 +161,16 @@ TheatersCollection < Theaters*, location, address, geo >
 {
      _id: oid  < Theaters.TheatersID >
      location:{
-     address:{
-       street1: string  < address.street1 >
-       city: string  < address.city >
-       state: string  < address.state >
-       zipcode: string  < address.zipcode >
-       street2: string  < address.street2 >
-     }
-     geo:{
-       type: string  < geo.type >
-       coordinates: numberDouble[]  < geo.coordinates >
+         address:{
+           street1: string  < address.street1 >
+           city: string  < address.city >
+           state: string  < address.state >
+           zipcode: string  < address.zipcode >
+           street2: string  < address.street2 >
+         }
+         geo:{
+           type: string  < geo.type >
+           coordinates: numberDouble[]  < geo.coordinates >
+         }
      }
 }
